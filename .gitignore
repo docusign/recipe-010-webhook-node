@@ -1,0 +1,6 @@
+.DS_store
+target
+node_modules
+.env
+.idea/
+*.iml
