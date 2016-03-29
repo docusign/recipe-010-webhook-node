@@ -45,7 +45,7 @@ process.on('uncaughtException', function(err) {
 	console.error((err && err.stack) ? err.stack : err);
 });
 
-app.set('port', process.env.port || 5000);
+app.set('port', process.env.PORT || 5000);
 app.set('host', process.env.IP || '0.0.0.0');
 
 app.use(express.static('public'));
