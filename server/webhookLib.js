@@ -499,22 +499,22 @@ var statusItem = function(file, filename, filesDirUrl, callback) {
 	});
 }
 
-WebhookLib.prototype.statusInfo = function(map) {
+WebhookLib.prototype.statusInfo = function(map, callback) {
 	// Info about the envelope
 	// Calls /accounts/{accountId}/envelopes/{envelopeId}
 	var self = this;
 	this.login(function(result) {
 		if ("false" === result.ok) {
-			return "{\"ok\": false, \"html\": \"<h3>Problem</h3><p>Couldn't login to DocuSign: " + result.errMsg + "</p>\"}";
+			return callback({"ok": false, "html": "<h3>Problem</h3><p>Couldn't login to DocuSign: " + result.errMsg + "</p>"});
 		}
 		var envelopesApi = new docusign.EnvelopesApi();
 		envelopesApi.getEnvelope(self.dsAccountId, map.envelope_id, function(error, envelope, response) {
 			if (error || !envelope || !envelope.envelopeId) {
-				return "{\"ok\": false, \"html\": \"<h3>Problem</h3><p>Error calling DocuSign</p>\"}";
+				return callback("ok": false, "html": "<h3>Problem</h3><p>Error calling DocuSign</p>"});
 			}
-			return JSON.stringify(envelope);
+			return callback(envelope);
 		});
-		return "{\"ok\": false, \"html\": \"<h3>Problem</h3><p>Couldn't get envelope.</p>\"}";
+		return callback({"ok": false, "html": "<h3>Problem</h3><p>Couldn't get envelope.</p>"});
 	});
 };
 
