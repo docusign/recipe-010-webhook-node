@@ -34,7 +34,7 @@ function WebhookLib() {
 
 	this.webhookSuffix = "/webhook";
 
-	this.xmlFileDir = "files/";
+	this.xmlFileDir = "public/";
 	this.docPrefix = "doc_";
 
 	////////////////////////////////////////////////////////////////////////
@@ -479,7 +479,7 @@ var statusItem = function(file, filename, filesDirUrl, callback) {
 
 		result = {
 			"envelope_id": envelopeId,
-			"xml_url": file,
+			"xml_url": path.resolve("../.." + file),
 			"time_generated": envelopeStatus[0].TimeGenerated[0],
 			"subject": envelopeStatus[0].Subject[0],
 			"sender_user_name": envelopeStatus[0].UserName[0],
