@@ -85,10 +85,13 @@ app.get('/', function(request, response) {
 	});
 });
 
-app.post('/webhook', bodyParser.text({ limit: '50mb', type: '*/xml' }), function(request, response) {
-        var contentType = request.headers['content-type'] || ''
-          , mime = contentType.split(';')[0];
-        console.log(mime);
+app.post('/webhook', bodyParser.text({
+	limit: '50mb',
+	type: '*/xml'
+}), function(request, response) {
+	var contentType = request.headers['content-type'] || '',
+		mime = contentType.split(';')[0];
+	console.log(mime);
 	console.log("webhook request body: " + JSON.stringify(request.body));
 	webhook(request.body);
 	response.send("Received!");

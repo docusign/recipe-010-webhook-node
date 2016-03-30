@@ -477,7 +477,7 @@ var statusItem = function(file, filename, filesDirUrl, callback) {
 			}
 		}
 
-		result.push({
+		result = {
 			"envelope_id": envelopeId,
 			"xml_url": file,
 			"time_generated": envelopeStatus[0].TimeGenerated[0],
@@ -494,7 +494,7 @@ var statusItem = function(file, filename, filesDirUrl, callback) {
 			"timezone_offset": xml.DocuSignEnvelopeInformation.TimeZoneOffset[0],
 			"recipients": recipients,
 			"documents": documents
-		});
+		};
 		return callback(result);
 	});
 }
