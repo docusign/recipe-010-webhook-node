@@ -514,7 +514,6 @@ WebhookLib.prototype.statusInfo = function(map, callback) {
 			}
 			return callback(envelope);
 		});
-		return callback({"ok": false, "html": "<h3>Problem</h3><p>Couldn't get envelope.</p>"});
 	});
 };
 
