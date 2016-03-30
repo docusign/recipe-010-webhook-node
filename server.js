@@ -111,7 +111,6 @@ app.post('/', urlencodedParser, function(request, response) {
 			case "status_info":
 				do_ajax(op, request.body, function(data) {
 					console.log(data);
-					response.contentType('application/json');
 					response.send(data);
 				});
 				return;
