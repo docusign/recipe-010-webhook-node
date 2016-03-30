@@ -462,7 +462,7 @@ var statusItem = function(file, filename, filesDirUrl, callback) {
 		var documents = [];
 		var envelopeId = envelopeStatus[0].EnvelopeID[0];
 		// iterate through the documents if the envelope is Completed
-		if ("Created" === envelopeStatus[0].Status[0]) {
+		if ("Completed" === envelopeStatus[0].Status[0]) {
 			// Loop through the DocumentPDFs element, noting each document.
 			nodeList = xml.DocuSignEnvelopeInformation.DocumentPDFs[0].DocumentPDF;
 			for (var i = 0; i < nodeList.length; i++) {
@@ -479,7 +479,7 @@ var statusItem = function(file, filename, filesDirUrl, callback) {
 
 		result = {
 			"envelope_id": envelopeId,
-			"xml_url": path.resolve("../.." + file),
+			"xml_url": "E" + envelopeId + "/" + path.basename(file),
 			"time_generated": envelopeStatus[0].TimeGenerated[0],
 			"subject": envelopeStatus[0].Subject[0],
 			"sender_user_name": envelopeStatus[0].UserName[0],
