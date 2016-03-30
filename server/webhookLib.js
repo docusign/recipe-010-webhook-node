@@ -394,7 +394,7 @@ WebhookLib.prototype.getDsCC1Name = function() {
 	return this.dsCC1Name;
 };
 
-WebhookLib.prototype.statusItems = function(params) {
+WebhookLib.prototype.statusItems = function(params, callback) {
 	// List of info about the envelope's event items received
 	var filesDirUrl = ((this.myUrl === null || this.myUrl === "") ? "/" : this.myUrl.substring(0, this.myUrl.indexOf('/') + 1)) + this.xmlFileDir;
 	// remove http or https
@@ -406,7 +406,7 @@ WebhookLib.prototype.statusItems = function(params) {
 	var results = [];
 	if (!fs.existsSync(filesDir)) {
 		console.log("results=" + JSON.stringify(results));
-		return results; // no results!
+		return callback(results); // no results!
 	}
 
 	var files = fs.readdirSync(filesDir);
@@ -420,7 +420,7 @@ WebhookLib.prototype.statusItems = function(params) {
 		}
 	}
 	console.log("results=" + JSON.stringify(results));
-	return results;
+	return callback(results);
 };
 
 var statusItem = function(file, filename, filesDirUrl, callback) {
