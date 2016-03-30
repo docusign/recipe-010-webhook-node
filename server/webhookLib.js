@@ -410,7 +410,9 @@ WebhookLib.prototype.statusItems = function(params) {
 	}
 
 	var files = fs.readdirSync(filesDir);
-	for (var file in files) {
+	for (var i in files) {
+		var file = filesDir + "/" + files[i];
+		console.log("file=" + file);
 		if (path.extname(file) === ".xml") {
 			statusItem(file, path.basename(file), filesDirUrl, function(result) {
 				results.push(result);
@@ -474,7 +476,7 @@ var statusItem = function(file, filename, filesDirUrl, callback) {
 				});
 			}
 		}
-
+console.log(JSON.stringify(xml));
 		result.push({
 			"envelope_id": envelopeId,
 			"xml_url": file,

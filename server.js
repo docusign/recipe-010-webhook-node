@@ -32,18 +32,7 @@ const fs = require('fs');
 const urlencodedParser = bodyParser.urlencoded({
 	extended: true
 });
-app.use(function(req, res, next) {
-  req.rawBody = '';
-  req.setEncoding('utf8');
 
-  req.on('data', function(chunk) { 
-    req.rawBody += chunk;
-  });
-
-  req.on('end', function() {
-    next();
-  });
-});
 app.use(bodyParser.json());
 
 const WebhookLib = require('./server/webhookLib');
@@ -96,9 +85,10 @@ app.get('/', function(request, response) {
 	});
 });
 
-app.post('/webhook', function(request, response) {
-	console.log("body: " + request.rawBody)
-	webhook(request.rawBody);
+app.post('/webhook', bodyParser.text(), function(request, response) {
+	console.log("webhook request body: " + request.body)
+	webhook(request.body);
+	response.send("Received!");
 });
 
 app.post('/', urlencodedParser, function(request, response) {
