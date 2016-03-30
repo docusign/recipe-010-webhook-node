@@ -91,12 +91,10 @@ app.post('/webhook', function(request, response) {
 
 app.post('/', urlencodedParser, function(request, response) {
 	var op = request.query.op;
-	console.log(request.body)
 	if (!!op && op !== "") {
 		switch (op) {
 			case "send2":
 				do_send2(request.body, function(html) {
-					console.log(html);
 					//response.set("Content-type", "application/json");
 					response.send(html);
 				});
