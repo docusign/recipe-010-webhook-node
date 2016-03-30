@@ -104,7 +104,7 @@ app.post('/', bodyParser.json(), function(request, response) {
 			case "send2":
 				do_send2(request.body, function(html) {
 					//response.setHeader("Content-type", "application/json");
-					response.send(html);
+					return response.send(html);
 				});
 				return;
 			case "status_items":
@@ -112,7 +112,7 @@ app.post('/', bodyParser.json(), function(request, response) {
 				do_ajax(op, request.body, function(data) {
 					console.log(data);
 					//response.contentType('application/json');
-					response.send(data);
+					return response.send(data);
 				});
 				return;
 				//default:
