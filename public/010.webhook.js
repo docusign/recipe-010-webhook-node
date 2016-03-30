@@ -122,6 +122,9 @@
             	contentType: "application/json; charset=utf-8",
 				dataType: "json"
 			})
+		  .fail(function(jqXHR, textStatus, errorThrown) {
+		    $(item_info_el).html("<h3>Problem: Couldn’t fetch the xml file</h3><p>" + textStatus + ": " + errorThrown + "</p>");
+		  })
 			.done(function(data, textStatus, jqXHR) {
 				var stop_fetching = process_items(data);
 				if (stop_fetching) {
