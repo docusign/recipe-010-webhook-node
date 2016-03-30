@@ -109,8 +109,8 @@ app.post('/', urlencodedParser, function(request, response) {
 				return;
 			case "status_items":
 			case "status_info":
-				var envelopeId = request.query.envelope_id;
 				do_ajax(op, request.body, function(data) {
+					console.log(JSON.stringify(data));
 					response.contentType('application/json');
 					response.send(JSON.stringify(data));
 				});
