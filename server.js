@@ -84,8 +84,13 @@ app.get('/', function(request, response) {
 	});
 });
 
+app.post('/webhook', function(request, response) {
+	webhook(request.body);
+});
+
 app.post('/', urlencodedParser, function(request, response) {
 	var op = request.query.op;
+	console.log(request.body)
 	if (!!op && op !== "") {
 		switch (op) {
 			case "send2":
@@ -101,9 +106,6 @@ app.post('/', urlencodedParser, function(request, response) {
 				do_ajax(op, request.body, function(html) {
 					response.send(html);
 				});
-				return;
-			case "webhook":
-				webhook(request.body);
 				return;
 				//default:
 				//response.send("");

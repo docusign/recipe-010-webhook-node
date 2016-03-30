@@ -32,7 +32,7 @@ function WebhookLib() {
 	this.docDocumentName = "NDA.pdf";
 	this.docFiletype = "application/pdf";
 
-	this.webhookSuffix = "?op=webhook";
+	this.webhookSuffix = "/webhook";
 
 	this.xmlFileDir = "files/";
 	this.docPrefix = "doc_";
