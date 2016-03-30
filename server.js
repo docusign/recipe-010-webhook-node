@@ -85,6 +85,7 @@ app.get('/', function(request, response) {
 });
 
 app.post('/webhook', function(request, response) {
+	console.log(request.body)
 	webhook(request.body);
 });
 
