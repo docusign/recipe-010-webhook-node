@@ -136,19 +136,19 @@ WebhookLib.prototype.webhookListener = function(data) {
 		// Some systems might still not like files or directories to start
 		// with numbers.
 		// So we prefix the envelope ids with E and the timestamps with T
-		var filesDir = path.resolve(__filename + "/../../" + self.xmlFileDir);
+		var filesDir = path.resolve(__filename + "/../../../" + self.xmlFileDir);
 		console.log("filesDir=" + filesDir);
 		if (!fs.existsSync(filesDir)) {
 			if (!fs.mkdirSync(filesDir, 0755))
 				console.log("Cannot create folder: " + filesDir);
 		}
-		var envelopeDir = path.resolve(__filename + "/../../" + self.xmlFileDir + "E" + envelopeId);
+		var envelopeDir = path.resolve(__filename + "/../../../" + self.xmlFileDir + "E" + envelopeId);
 		console.log("envelopeDir=" + envelopeDir);
 		if (!fs.existsSync(envelopeDir)) {
 			if (!fs.mkdirSync(envelopeDir, 0755))
 				console.log("Cannot create folder: " + envelopeDir);
 		}
-		var filename = path.resolve(__filename + "/../../" + self.xmlFileDir + "E" + envelopeId + "/T" + timeGenerated.replace(/:/g, '_') + ".xml");
+		var filename = path.resolve(__filename + "/../../../" + self.xmlFileDir + "E" + envelopeId + "/T" + timeGenerated.replace(/:/g, '_') + ".xml");
 		console.log("filename=" + filename);
 		try {
 			fs.writeFile(filename, data);
@@ -400,7 +400,7 @@ WebhookLib.prototype.statusItems = function(params, callback) {
 	// remove http or https
 	filesDirUrl = filesDirUrl.replace("http:", "").replace("https:", "");
 	console.log("filesDirUrl=" + filesDirUrl);
-	var filesDir = path.resolve(__filename + "/../../" + this.xmlFileDir + "E" + params.envelope_id);
+	var filesDir = path.resolve(__filename + "/../../../" + this.xmlFileDir + "E" + params.envelope_id);
 	console.log("filesDir=" + filesDir);
 
 	var results = [];
