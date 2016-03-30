@@ -103,7 +103,6 @@ app.post('/', urlencodedParser, function(request, response) {
 		switch (op) {
 			case "send2":
 				do_send2(request.body, function(html) {
-					response.setHeader("Content-type", "application/json");
 					response.send(html);
 					return;
 				});
