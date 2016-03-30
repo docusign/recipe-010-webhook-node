@@ -26,6 +26,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 const express = require('express');
+const serveStatic = require('serve-static');
 const app = express();
 const bodyParser = require('body-parser');
 const fs = require('fs');
@@ -49,9 +50,11 @@ process.on('uncaughtException', function(err) {
 app.set('port', process.env.PORT || 5000);
 app.set('host', process.env.IP || '0.0.0.0');
 
-app.use(express.static('public'));
+//app.use(express.static('public'));
 //app.use("/public", express.static(__dirname + "/public"));
-app.use("/files", express.static(__dirname + "/files"));
+//app.use("/files", express.static(__dirname + "/files"));
+app.use(serveStatic(__dirname + '/public'))
+app.use(serveStatic(__dirname + '/files'))
 
 app.set('view engine', 'ejs');
 
