@@ -103,16 +103,18 @@ app.post('/', urlencodedParser, function(request, response) {
 		switch (op) {
 			case "send2":
 				do_send2(request.body, function(html) {
+					//response.setHeader("Content-type", "application/json");
 					response.send(html);
-					return;
 				});
+				return;
 			case "status_items":
 			case "status_info":
 				do_ajax(op, request.body, function(data) {
 					console.log(data);
+					//response.contentType('application/json');
 					response.send(data);
-					return;
 				});
+				return;
 				//default:
 				//response.send("");
 				//return;
