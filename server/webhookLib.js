@@ -476,7 +476,7 @@ var statusItem = function(file, filename, filesDirUrl, callback) {
 				});
 			}
 		}
-console.log(JSON.stringify(xml));
+
 		result.push({
 			"envelope_id": envelopeId,
 			"xml_url": file,
