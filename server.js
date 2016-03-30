@@ -169,8 +169,8 @@ do_ajax = function(op, params, callback) {
 		}
 	} else {
 		result = "{\"ok\": false, \"html\": \"<h2>Bad JSON input!</h2>\"}";
+	  return callback(result);
 	}
-	callback(result);
 }
 
 do_status = function(envelopeId, callback) {
