@@ -123,7 +123,7 @@
 				dataType: "json"
 			})
 		  .fail(function(jqXHR, textStatus, errorThrown) {
-		    $(item_info_el).html("<h3>Problem: Couldn’t fetch the xml file</h3><p>" + textStatus + ": " + errorThrown + "</p>");
+		    console.log("Problem: Couldn’t fetch the xml file" + textStatus + ": " + errorThrown);
 		  })
 			.done(function(data, textStatus, jqXHR) {
 				var stop_fetching = process_items(data);
