@@ -510,7 +510,7 @@ WebhookLib.prototype.statusInfo = function(map, callback) {
 		var envelopesApi = new docusign.EnvelopesApi();
 		envelopesApi.getEnvelope(self.dsAccountId, map.envelope_id, function(error, envelope, response) {
 			if (error || !envelope || !envelope.envelopeId) {
-				return callback("ok": false, "html": "<h3>Problem</h3><p>Error calling DocuSign</p>"});
+				return callback({"ok": false, "html": "<h3>Problem</h3><p>Error calling DocuSign</p>"});
 			}
 			return callback(envelope);
 		});
