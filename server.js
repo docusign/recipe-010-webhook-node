@@ -86,6 +86,9 @@ app.get('/', function(request, response) {
 });
 
 app.post('/webhook', bodyParser.text(), function(request, response) {
+        var contentType = request.headers['content-type'] || ''
+          , mime = contentType.split(';')[0];
+        console.log(mime);
 	console.log("webhook request body: " + JSON.stringify(request.body));
 	webhook(request.body);
 	response.send("Received!");
