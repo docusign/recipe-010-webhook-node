@@ -147,7 +147,7 @@ module.exports.login = function(callback) {
 		}
 		map.ok = found.toString();
 		map.errMsg = errMsg;
-	  callback(map);
+		callback(map);
 	});
 }
 

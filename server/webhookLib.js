@@ -4,71 +4,76 @@ const fs = require('fs');
 const path = require('path');
 
 const dsRecipeLib = require('./dsRecipeLib');
+var docusign
 
-// Settings
-//
-var dsUserEmail = "***";
-var dsUserPw = "***";
-var dsIntegrationId = "***";
-var dsSigner1Name = "***"; // Set signer info here or leave as is
-// to use example signers
-var dsSigner1Email = "***";
-var dsCC1Name = "***"; // Set a cc recipient here or leave as is
-// to use example recipients
-var dsCC1Email = "***";
-var dsAccountId; // Set during login process or explicitly by
-// configuration here.
-// Note that many customers have more than one account!
-// A username/pw can access multiple accounts!
-var dsBaseUrl; // The base url associated with the account_id.
-var dsAuthHeader;
-var myUrl; // The url for this script. Must be accessible from the
-// internet!
-// Can be set here or determined dynamically
-var webhookUrl;
-var docFilename = "sample_documents_master/NDA.pdf";
-var docDocumentName = "NDA.pdf";
-var docFiletype = "application/pdf";
+function WebhookLib() {
+	// Settings
+	//
+	this.dsUserEmail = "***";
+	this.dsUserPw = "***";
+	this.dsIntegrationId = "***";
+	this.dsSigner1Name = "***"; // Set signer info here or leave as is
+	// to use example signers
+	this.dsSigner1Email = "***";
+	this.dsCC1Name = "***"; // Set a cc recipient here or leave as is
+	// to use example recipients
+	this.dsCC1Email = "***";
+	this.dsAccountId; // Set during login process or explicitly by
+	// configuration here.
+	// Note that many customers have more than one account!
+	// A username/pw can access multiple accounts!
+	this.dsBaseUrl; // The base url associated with the account_id.
+	this.dsAuthHeader;
+	this.myUrl; // The url for this script. Must be accessible from the
+	// internet!
+	// Can be set here or determined dynamically
+	this.webhookUrl;
+	this.docFilename = "sample_documents_master/NDA.pdf";
+	this.docDocumentName = "NDA.pdf";
+	this.docFiletype = "application/pdf";
 
-var webhookSuffix = "?op=webhook";
+	this.webhookSuffix = "?op=webhook";
 
-var xmlFileDir = "files/";
-var docPrefix = "doc_";
+	this.xmlFileDir = "files/";
+	this.docPrefix = "doc_";
 
-////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////
-var docusign = dsRecipeLib.init(dsUserEmail, dsUserPw, dsIntegrationId, dsAccountId);
-myUrl = dsRecipeLib.getMyUrl(myUrl);
+	////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
+	docusign = dsRecipeLib.init(this.dsUserEmail, this.dsUserPw, this.dsIntegrationId, this.dsAccountId);
+	this.myUrl = dsRecipeLib.getMyUrl(this.myUrl);
 
-////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////
+};
 
-module.exports.send1 = function(url, html, callback) {
+WebhookLib.prototype.send1 = function(url, html, callback) {
 	// Prepares for sending the envelope
+	var self = this;
 	this.login(function(result) {
 		if ("false" === result.ok) {
 			callback(result, html);
 		}
-		myUrl = url;
+		self.myUrl = url;
 
-		webhookUrl = (!!myUrl && myUrl !== '') ? myUrl + webhookSuffix : "http://localhost:5000/" + webhookSuffix;
-		dsSigner1Name = dsRecipeLib.getSignerName(dsSigner1Name);
-		dsSigner1Email = dsRecipeLib.getSignerEmail(dsSigner1Email);
-		dsCC1Name = dsRecipeLib.getSignerName(dsCC1Name);
-		dsCC1Email = dsRecipeLib.getSignerEmail(dsCC1Email);
+		self.webhookUrl = (!!self.myUrl && self.myUrl !== '') ? self.myUrl + self.webhookSuffix : "http://localhost:5000/" + self.webhookSuffix;
+		self.dsSigner1Name = dsRecipeLib.getSignerName(self.dsSigner1Name);
+		self.dsSigner1Email = dsRecipeLib.getSignerEmail(self.dsSigner1Email);
+		self.dsCC1Name = dsRecipeLib.getSignerName(self.dsCC1Name);
+		self.dsCC1Email = dsRecipeLib.getSignerEmail(self.dsCC1Email);
 
 		callback(result, html);
 	});
-}
+};
 
-module.exports.login = function(callback) {
+WebhookLib.prototype.login = function(callback) {
 	var map = {};
+	var self = this;
 
 	// Logs into DocuSign
 	dsRecipeLib.login(function(result) {
 		if ("true" === result.ok) {
-			dsAccountId = dsRecipeLib.getDsAccountId();
-			dsBaseUrl = dsRecipeLib.getDsBaseUrl();
-			dsAuthHeader = dsRecipeLib.getDsAuthHeader();
+			self.dsAccountId = dsRecipeLib.getDsAccountId();
+			self.dsBaseUrl = dsRecipeLib.getDsBaseUrl();
+			self.dsAuthHeader = dsRecipeLib.getDsAuthHeader();
 			map.ok = "true";
 		} else {
 			map.ok = "false";
@@ -76,25 +81,25 @@ module.exports.login = function(callback) {
 		}
 		callback(map);
 	});
-}
+};
 
-module.exports.getDsAccountId = function() {
-	return dsAccountId;
-}
+WebhookLib.prototype.getDsAccountId = function() {
+	return this.dsAccountId;
+};
 
-module.exports.setDsAccountId = function(accountId) {
+WebhookLib.prototype.setDsAccountId = function(accountId) {
 	this.dsAccountId = accountId;
-}
+};
 
-module.exports.getDsSigner1Name = function() {
-	return dsSigner1Name;
-}
+WebhookLib.prototype.getDsSigner1Name = function() {
+	return this.dsSigner1Name;
+};
 
-module.exports.getWebhookUrl = function() {
-	return webhookUrl;
-}
+WebhookLib.prototype.getWebhookUrl = function() {
+	return this.webhookUrl;
+};
 
-module.exports.webhookListener = function(data) {
+WebhookLib.prototype.webhookListener = function(data) {
 	// Process the incoming webhook data. See the DocuSign Connect guide
 	// for more information
 	//
@@ -115,6 +120,7 @@ module.exports.webhookListener = function(data) {
 	// Tip: aim for no more than a couple of seconds! Use a separate queuing
 	// service
 	// if need be.
+	var self = this;
 	console.log("Data received from DS Connect: " + JSON.stringify(data));
 	xmlParser.parseString(data, function(err, xml) {
 		if (err || !xml) {
@@ -130,21 +136,19 @@ module.exports.webhookListener = function(data) {
 		// Some systems might still not like files or directories to start
 		// with numbers.
 		// So we prefix the envelope ids with E and the timestamps with T
-		// File filesDir = new File(System.getProperty("user.dir") + "/" +
-		// xmlFileDir);
-		var filesDir = path.resolve(__filename + "/../" + xmlFileDir);
+		var filesDir = path.resolve(__filename + "/../" + self.xmlFileDir);
 		console.log("filesDir=" + filesDir);
 		if (!fs.existsSync(filesDir)) {
 			if (!fs.mkdirSync(filesDir, 0755))
 				console.log("Cannot create folder: " + filesDir);
 		}
-		var envelopeDir = path.resolve(__filename + "/../" + xmlFileDir + "E" + envelopeId);
+		var envelopeDir = path.resolve(__filename + "/../" + self.xmlFileDir + "E" + envelopeId);
 		console.log("envelopeDir=" + envelopeDir);
 		if (!fs.existsSync(envelopeDir)) {
 			if (!fs.mkdirSync(envelopeDir, 0755))
 				console.log("Cannot create folder: " + envelopeDir);
 		}
-		var filename = path.resolve(__filename + "/../" + xmlFileDir + "E" + envelopeId + "/T" + timeGenerated.replace(/:/g, '_') + ".xml");
+		var filename = path.resolve(__filename + "/../" + self.xmlFileDir + "E" + envelopeId + "/T" + timeGenerated.replace(/:/g, '_') + ".xml");
 		console.log("filename=" + filename);
 		try {
 			fs.writeFile(filename, data);
@@ -162,7 +166,7 @@ module.exports.webhookListener = function(data) {
 			nodeList = xml.DocuSignEnvelopeInformation.DocumentPDFs[0].DocumentPDF;
 			for (var i = 0; i < nodeList.length; i++) {
 				var pdf = nodeList[i];
-				filename = docPrefix + pdf.DocumentID[0] + ".pdf";
+				filename = self.docPrefix + pdf.DocumentID[0] + ".pdf";
 				var fullFilename = envelopeDir + "/" + filename;
 				try {
 					fs.writeFile(fullFilename, pdf.PDFBytes[0]);
@@ -175,9 +179,9 @@ module.exports.webhookListener = function(data) {
 		}
 		return;
 	});
-}
+};
 
-module.exports.send2 = function(params, callback) {
+WebhookLib.prototype.send2 = function(params, callback) {
 	// Send the envelope
 	// params --
 	// "ds_signer1_name"
@@ -186,15 +190,16 @@ module.exports.send2 = function(params, callback) {
 	// "ds_cc1_email"
 	// "webhook_url"
 	// "baseurl"
+	var self = this;
 	this.login(function(result) {
 		if ("false" === result.ok) {
 			return callback("{\"ok\": false, \"html\": \"<h3>Problem</h3><p>Couldn't login to DocuSign: " + result.errMsg + "</p>\"}");
 		}
-		webhookUrl = params.webhook_url;
-		dsSigner1Name = params.ds_signer1_name;
-		dsSigner1Email = params.ds_signer1_email;
-		dsCC1Name = params.ds_cc1_name;
-		dsCC1Email = params.ds_cc1_email;
+		self.webhookUrl = params.webhook_url;
+		self.dsSigner1Name = params.ds_signer1_name;
+		self.dsSigner1Email = params.ds_signer1_email;
+		self.dsCC1Name = params.ds_cc1_name;
+		self.dsCC1Email = params.ds_cc1_email;
 		// The envelope request includes a signer-recipient and their tabs
 		// object,
 		// and an eventNotification object which sets the parameters for
@@ -221,7 +226,7 @@ module.exports.send2 = function(params, callback) {
 		recipientEvents.push(recipientEvent);
 
 		var eventNotification = new docusign.EventNotification();
-		eventNotification.setUrl(webhookUrl);
+		eventNotification.setUrl(self.webhookUrl);
 		eventNotification.setLoggingEnabled("true");
 		eventNotification.setRequireAcknowledgment("true");
 		eventNotification.setUseSoapInterface("false");
@@ -239,7 +244,7 @@ module.exports.send2 = function(params, callback) {
 		var fileBytes = null;
 		try {
 			// read file from a local directory
-			fileBytes = fs.readFileSync(path.resolve(__filename + '/../../public/' + docFilename));
+			fileBytes = fs.readFileSync(path.resolve(__filename + '/../../public/' + self.docFilename));
 		} catch (ex) {
 			return callback("{\"ok\": false, \"html\": \"<h3>Problem</h3><p>Couldn't load local envelope document: " + ex + "</p>\"}");
 		}
@@ -247,21 +252,21 @@ module.exports.send2 = function(params, callback) {
 		var doc = new docusign.Document();
 		var base64Doc = new Buffer(fileBytes).toString('base64');
 		doc.setDocumentId("1");
-		doc.setName(docDocumentName);
+		doc.setName(self.docDocumentName);
 		doc.setDocumentBase64(base64Doc);
 		var documents = [];
 		documents.push(doc);
 		var signer = new docusign.Signer();
-		signer.setEmail(dsSigner1Email);
-		signer.setName(dsSigner1Name);
+		signer.setEmail(self.dsSigner1Email);
+		signer.setName(self.dsSigner1Name);
 		signer.setRecipientId("1");
 		signer.setRoutingOrder("1");
 		signer.setTabs(getNdaFields());
 		var signers = [];
 		signers.push(signer);
 		var carbonCopy = new docusign.CarbonCopy();
-		carbonCopy.setEmail(dsCC1Email);
-		carbonCopy.setName(dsCC1Name);
+		carbonCopy.setEmail(self.dsCC1Email);
+		carbonCopy.setName(self.dsCC1Name);
 		carbonCopy.setRecipientId("2");
 		carbonCopy.setRoutingOrder("2");
 		var carbonCopies = [];
@@ -272,7 +277,7 @@ module.exports.send2 = function(params, callback) {
 		var envelopeDefinition = new docusign.EnvelopeDefinition();
 		// We want to use the most friendly email subject line.
 		// The regexp below removes the suffix from the file name.
-		envelopeDefinition.setEmailSubject("Please sign the " + docDocumentName.replace(/\\.[^.\\s]{3,4}/g, '') + " document");
+		envelopeDefinition.setEmailSubject("Please sign the " + self.docDocumentName.replace(/\\.[^.\\s]{3,4}/g, '') + " document");
 		envelopeDefinition.setDocuments(documents);
 		envelopeDefinition.setRecipients(recipients);
 		envelopeDefinition.setEventNotification(eventNotification);
@@ -281,7 +286,7 @@ module.exports.send2 = function(params, callback) {
 		removeNulls(envelopeDefinition);
 		// Send the envelope:
 		var envelopesApi = new docusign.EnvelopesApi();
-		envelopesApi.createEnvelope(dsAccountId, envelopeDefinition, null, function(error, envelopeSummary, response) {
+		envelopesApi.createEnvelope(self.dsAccountId, envelopeDefinition, null, function(error, envelopeSummary, response) {
 			if (error || !envelopeSummary || !envelopeSummary.envelopeId) {
 				return callback("{\"ok\": false, \"html\": \"<h3>Problem</h3> \r\n  <p>Error sending DocuSign envelope</p>" + error + "\"}");
 			}
@@ -293,8 +298,8 @@ module.exports.send2 = function(params, callback) {
 			html += "  class='btn btn-primary' role='button' target='_blank' style='margin-right:1.5em;'>";
 			html += "View Events</a> (A new tab/window will be used.)</p>";
 			html += "<h3>2. Respond to the Signature Request</h3>";
-			var emailAccess = dsRecipeLib.getTempEmailAccess(dsSigner1Email);
-			if (!emailAccess) {
+			var emailAccess = dsRecipeLib.getTempEmailAccess(self.dsSigner1Email);
+			if (!!emailAccess) {
 				// A temp account was used for the email
 				html += "<p>Respond to the request via your mobile phone by using the QR code: </p>";
 				html += "<p>" + dsRecipeLib.getTempEmailAccessQrcode(emailAccess) + "</p>";
@@ -302,12 +307,12 @@ module.exports.send2 = function(params, callback) {
 			} else {
 				// A regular email account was used
 				html += "<p>Respond to the request via your mobile phone or other mail tool.</p>";
-				html += "<p>The email was sent to " + dsSigner1Name + " &lt;" + dsSigner1Email + "&gt;</p>";
+				html += "<p>The email was sent to " + self.dsSigner1Name + " &lt;" + self.dsSigner1Email + "&gt;</p>";
 			}
 			return callback("{ \"ok\": true, \r\n \"envelope_id\": \"" + envelopeId + "\", \r\n \"html\": \"" + html + "\", \r\n \"js\": [{\"disable_button\": \"sendbtn\"}]}");
 		});
 	});
-}
+};
 
 removeNulls = function(obj) {
 	var isArray = obj instanceof Array;
@@ -377,25 +382,25 @@ getNdaFields = function() {
 	return fields;
 }
 
-module.exports.getDsSigner1Email = function() {
-	return dsSigner1Email;
-}
+WebhookLib.prototype.getDsSigner1Email = function() {
+	return this.dsSigner1Email;
+};
 
-module.exports.getDsCC1Email = function() {
-	return dsCC1Email;
-}
+WebhookLib.prototype.getDsCC1Email = function() {
+	return this.dsCC1Email;
+};
 
-module.exports.getDsCC1Name = function() {
-	return dsCC1Name;
-}
+WebhookLib.prototype.getDsCC1Name = function() {
+	return this.dsCC1Name;
+};
 
-module.exports.statusItems = function(params) {
+WebhookLib.prototype.statusItems = function(params) {
 	// List of info about the envelope's event items received
-	var filesDirUrl = ((myUrl === null || myUrl === "") ? "/" : myUrl.substring(0, myUrl.indexOf('/') + 1)) + xmlFileDir;
+	var filesDirUrl = ((this.myUrl === null || this.myUrl === "") ? "/" : this.myUrl.substring(0, this.myUrl.indexOf('/') + 1)) + this.xmlFileDir;
 	// remove http or https
 	filesDirUrl = filesDirUrl.replace("http:", "").replace("https:", "");
 	console.log("filesDirUrl=" + filesDirUrl);
-	var filesDir = path.resolve(__filename + "/../" + xmlFileDir + "E" + params.envelope_id);
+	var filesDir = path.resolve(__filename + "/../" + this.xmlFileDir + "E" + params.envelope_id);
 	console.log("filesDir=" + filesDir);
 
 	var results = [];
@@ -414,12 +419,13 @@ module.exports.statusItems = function(params) {
 	}
 	console.log("results=" + JSON.stringify(results));
 	return JSON.stringify(results);
-}
+};
 
 var statusItem = function(file, filename, filesDirUrl, callback) {
 	// summary info about the notification
 	var result = [];
 	var data;
+	var self = this;
 	try {
 		// read file from a local directory
 		data = fs.readFileSync(file);
@@ -459,7 +465,7 @@ var statusItem = function(file, filename, filesDirUrl, callback) {
 			nodeList = xml.DocuSignEnvelopeInformation.DocumentPDFs[0].DocumentPDF;
 			for (var i = 0; i < nodeList.length; i++) {
 				var pdf = nodeList[i];
-				var docFilename = docPrefix + (pdf.DocumentID ? pdf.DocumentID[0] : "") + ".pdf";
+				var docFilename = self.docPrefix + (pdf.DocumentID ? pdf.DocumentID[0] : "") + ".pdf";
 				documents.push({
 					"document_ID": (pdf.DocumentID ? pdf.DocumentID[0] : ""),
 					"document_type": pdf.DocumentType[0],
@@ -491,15 +497,16 @@ var statusItem = function(file, filename, filesDirUrl, callback) {
 	});
 }
 
-module.exports.statusInfo = function(map) {
+WebhookLib.prototype.statusInfo = function(map) {
 	// Info about the envelope
 	// Calls /accounts/{accountId}/envelopes/{envelopeId}
+	var self = this;
 	this.login(function(result) {
 		if ("false" === result.ok) {
 			return "{\"ok\": false, \"html\": \"<h3>Problem</h3><p>Couldn't login to DocuSign: " + result.errMsg + "</p>\"}";
 		}
 		var envelopesApi = new docusign.EnvelopesApi();
-		envelopesApi.getEnvelope(dsAccountId, map.envelope_id, function(error, envelope, response) {
+		envelopesApi.getEnvelope(self.dsAccountId, map.envelope_id, function(error, envelope, response) {
 			if (error || !envelope || !envelope.envelopeId) {
 				return "{\"ok\": false, \"html\": \"<h3>Problem</h3><p>Error calling DocuSign</p>\"}";
 			}
@@ -507,4 +514,6 @@ module.exports.statusInfo = function(map) {
 		});
 		return "{\"ok\": false, \"html\": \"<h3>Problem</h3><p>Couldn't get envelope.</p>\"}";
 	});
-}
+};
+
+module.exports = WebhookLib;

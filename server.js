@@ -34,7 +34,7 @@ const urlencodedParser = bodyParser.urlencoded({
 });
 app.use(bodyParser.json());
 
-const webhookLib = require('./server/webhookLib')
+const WebhookLib = require('./server/webhookLib');
 
 var socketid;
 
@@ -80,7 +80,7 @@ app.get('/', function(request, response) {
 		}
 	}
 	show_options(function(html) {
-					response.send(html);
+		response.send(html);
 	});
 });
 
@@ -91,7 +91,7 @@ app.post('/', urlencodedParser, function(request, response) {
 			case "send2":
 				do_send2(request.body, function(html) {
 					console.log(html);
-				  //response.set("Content-type", "application/json");
+					//response.set("Content-type", "application/json");
 					response.send(html);
 				});
 				return;
@@ -105,7 +105,7 @@ app.post('/', urlencodedParser, function(request, response) {
 			case "webhook":
 				webhook(request.body);
 				return;
-			//default:
+				//default:
 				//response.send("");
 				//return;
 		}
@@ -137,6 +137,7 @@ webhook = function(data) {
 	// An incoming call from the DocuSign platform
 	// See the Connect guide:
 	// https://www.docusign.com/sites/default/files/connect-guide_0.pdf
+	var webhookLib = new WebhookLib();
 	webhookLib.webhookListener(data);
 }
 
@@ -145,15 +146,16 @@ do_ajax = function(op, params, callback) {
 	if (!!params) {
 		// The result includes the html for showing the View status button,
 		// and more
+		var webhookLib = new WebhookLib();
 		switch (op) {
 			case "status_items":
-			webhookLib.statusItems(params, function(data) {
-				callback(data);
-			});
+				webhookLib.statusItems(params, function(data) {
+					callback(data);
+				});
 			case "status_info":
-			webhookLib.statusInfo(params, function(data) {
-				callback(data);
-			});
+				webhookLib.statusInfo(params, function(data) {
+					callback(data);
+				});
 		}
 	} else {
 		result = "{\"ok\": false, \"html\": \"<h2>Bad JSON input!</h2>\"}";
@@ -183,18 +185,20 @@ do_send2 = function(params, callback) {
 	if (!!params) {
 		// The result includes the html for showing the View status button,
 		// and more
+		var webhookLib = new WebhookLib();
 		webhookLib.send2(params, function(data) {
 			callback(data);
 		});
 	} else {
 		result = "{\"ok\": false, \"html\": \"<h2>Bad JSON input!</h2>\"}";
-	  callback(result);
+		callback(result);
 	}
 }
 
 do_send1 = function(url, callback) {
 	// Show a button that sends the signature request
 	// When pressed, we're called with op=send2
+	var webhookLib = new WebhookLib();
 	webhookLib.send1(url, show_header(), function(map, html) {
 		if ("true" === map.ok) {
 			html += "<h5>DocuSign Account id: " + webhookLib.getDsAccountId() + "</h5>";
