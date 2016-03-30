@@ -86,7 +86,7 @@ app.get('/', function(request, response) {
 });
 
 app.post('/webhook', bodyParser.text(), function(request, response) {
-	console.log("webhook request body: " + request.body)
+	console.log("webhook request body: " + JSON.stringify(request.body));
 	webhook(request.body);
 	response.send("Received!");
 });
