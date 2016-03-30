@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "DocuSign Connect webhook recipe.",
   "main": "server.js",
+  "engines" : { "node" : ">=5.4.0" },
   "scripts": {
     "start": "node server.js",
     "test": "semistandard && node server.js"
