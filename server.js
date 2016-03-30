@@ -49,8 +49,8 @@ process.on('uncaughtException', function(err) {
 app.set('port', process.env.PORT || 5000);
 app.set('host', process.env.IP || '0.0.0.0');
 
-//app.use(express.static('public'));
-app.use("/public", express.static(__dirname + "/public"));
+app.use(express.static('public'));
+//app.use("/public", express.static(__dirname + "/public"));
 app.use("/files", express.static(__dirname + "/files"));
 
 app.set('view engine', 'ejs');
