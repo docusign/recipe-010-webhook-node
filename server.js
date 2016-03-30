@@ -103,16 +103,15 @@ app.post('/', urlencodedParser, function(request, response) {
 		switch (op) {
 			case "send2":
 				do_send2(request.body, function(html) {
-					response.set("Content-type", "application/json");
+					response.setHeader("Content-type", "application/json");
 					response.send(html);
 				});
 				return;
 			case "status_items":
 			case "status_info":
 				var envelopeId = request.query.envelope_id;
-				do_ajax(op, request.body, function(html) {
-					response.set("Content-type", "application/json");
-					response.send(html);
+				do_ajax(op, request.body, function(data) {
+					response.json(data);
 				});
 				return;
 				//default:

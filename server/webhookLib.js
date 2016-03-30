@@ -406,7 +406,7 @@ WebhookLib.prototype.statusItems = function(params) {
 	var results = [];
 	if (!fs.existsSync(filesDir)) {
 		console.log("results=" + JSON.stringify(results));
-		return JSON.stringify(results); // no results!
+		return results; // no results!
 	}
 
 	var files = fs.readdirSync(filesDir);
@@ -420,7 +420,7 @@ WebhookLib.prototype.statusItems = function(params) {
 		}
 	}
 	console.log("results=" + JSON.stringify(results));
-	return JSON.stringify(results);
+	return results;
 };
 
 var statusItem = function(file, filename, filesDirUrl, callback) {
