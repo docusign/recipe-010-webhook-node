@@ -78,6 +78,7 @@ app.get('/', function(request, response) {
 				});
 				return;
 			case "status_items":
+			case "status_info":
 				do_ajax(op, request.body, function(html) {
 					response.send(html);
 				});
