@@ -97,24 +97,23 @@ app.post('/webhook', bodyParser.text({
 	response.send("Received!");
 });
 
-app.post('/', bodyParser.json(), function(request, response) {
+app.post('/', urlencodedParser, function(request, response) {
 	var op = request.query.op;
 	if (!!op && op !== "") {
 		switch (op) {
 			case "send2":
 				do_send2(request.body, function(html) {
-					//response.setHeader("Content-type", "application/json");
-					return response.send(html);
+					response.setHeader("Content-type", "application/json");
+					response.send(html);
+					return;
 				});
-				return;
 			case "status_items":
 			case "status_info":
 				do_ajax(op, request.body, function(data) {
 					console.log(data);
-					//response.contentType('application/json');
-					return response.send(data);
+					response.send(data);
+					return;
 				});
-				return;
 				//default:
 				//response.send("");
 				//return;
