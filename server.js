@@ -160,11 +160,11 @@ do_ajax = function(op, params, callback) {
 		switch (op) {
 			case "status_items":
 				webhookLib.statusItems(params, function(data) {
-					callback(data);
+					return callback(data);
 				});
 			case "status_info":
 				webhookLib.statusInfo(params, function(data) {
-					callback(data);
+					return callback(data);
 				});
 		}
 	} else {
