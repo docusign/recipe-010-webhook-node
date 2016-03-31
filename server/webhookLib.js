@@ -167,7 +167,7 @@ WebhookLib.prototype.webhookListener = function(data) {
 			for (var i = 0; i < nodeList.length; i++) {
 				var pdf = nodeList[i];
 				filename = "doc_" + (pdf.DocumentID ? pdf.DocumentID[0] : "") + ".pdf";
-				var fullFilename = path.resolve(__filename + "/../../" + self.xmlFileDir + "E" + envelopeId + "/" filename);
+				var fullFilename = path.resolve(__filename + "/../../" + self.xmlFileDir + "E" + envelopeId + "/" + filename);
 				try {
 					fs.writeFileSync(fullFilename, new Buffer(pdf.PDFBytes[0], 'binary'));
 				} catch (ex) {
