@@ -71,6 +71,9 @@
       "serverFarmId": "[parameters('hostingPlanName')]",
       "siteConfig": {
         "appSettings": [{
+          "name": "websiteUrl",
+          "value": ""
+        }, {
           "name": "docusignDeveloperEmail",
           "value": "[parameters('docusignDeveloperEmail')]"
         }, {
@@ -79,6 +82,9 @@
         }, {
           "name": "docusignIntegratorKey",
           "value": "[parameters('docusignIntegratorKey')]"
+        }, {
+          "name": "siteName",
+          "value": "[parameters('siteName')]"
         }]
       },
     },
