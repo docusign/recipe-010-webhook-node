@@ -3,7 +3,7 @@ This directory includes the source for the Node Webhook recipe and enables it to
 
 The /src directory holds the complete example
 
-The top level files are used to manage and configure the example on [Heroku](https://www.heroku.com/).
+The top level files are used to manage and configure the example on [Heroku](https://www.heroku.com/) and [MS Azure](https://portal.azure.com/).
 
 ## Run the recipe on Heroku
 The recipe source can be run on [Heroku](https://www.heroku.com/) using the free service level. No credit card needed!
@@ -11,6 +11,11 @@ The recipe source can be run on [Heroku](https://www.heroku.com/) using the free
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 Click the Deploy button, then enter your DocuSign Developer Sandbox credentials on the form in the Heroku dashboard. Then press the View button at the bottom of the dashboard screen when it is enabled by the dashboard.
+
+## Run the recipe on MS Azure 
+The recipe source can be run on [MS Azure](https://portal.azure.com/) using the free service level. No credit card needed!
+
+[![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
 
 ## Run the recipe on your own server
 
