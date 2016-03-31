@@ -169,7 +169,7 @@ WebhookLib.prototype.webhookListener = function(data) {
 				filename = "doc_" + (pdf.DocumentID ? pdf.DocumentID[0] : "") + ".pdf";
 				var fullFilename = path.resolve(__filename + "/../../" + self.xmlFileDir + "E" + envelopeId + "/" + filename);
 				try {
-					fs.writeFileSync(fullFilename, new Buffer(pdf.PDFBytes[0], 'binary'));
+					fs.writeFileSync(fullFilename, pdf.PDFBytes[0]);
 				} catch (ex) {
 					// Couldn't write the file! Alert the humans!
 					console.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't store pdf " + filename + " !");
