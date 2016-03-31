@@ -151,7 +151,7 @@ WebhookLib.prototype.webhookListener = function(data) {
 		var filename = path.resolve(__filename + "/../../" + self.xmlFileDir + "E" + envelopeId + "/T" + timeGenerated.replace(/:/g, '_') + ".xml");
 		console.log("filename=" + filename);
 		try {
-			fs.writeFile(filename, data);
+			fs.writeFileSync(filename, data);
 		} catch (ex) {
 			// Couldn't write the file! Alert the humans!
 			console.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't store xml " + filename + " !");
@@ -167,9 +167,9 @@ WebhookLib.prototype.webhookListener = function(data) {
 			for (var i = 0; i < nodeList.length; i++) {
 				var pdf = nodeList[i];
 				filename = "doc_" + (pdf.DocumentID ? pdf.DocumentID[0] : "") + ".pdf";
-				var fullFilename = envelopeDir + "/" + filename;
+				var fullFilename = path.resolve(__filename + "/../../" + self.xmlFileDir + "E" + envelopeId + filename);
 				try {
-					fs.writeFile(fullFilename, new Buffer(pdf.PDFBytes[0], 'binary'));
+					fs.writeFileSync(fullFilename, new Buffer(pdf.PDFBytes[0], 'binary').toString());
 				} catch (ex) {
 					// Couldn't write the file! Alert the humans!
 					console.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't store pdf " + filename + " !");
