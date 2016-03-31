@@ -166,10 +166,10 @@ WebhookLib.prototype.webhookListener = function(data) {
 			nodeList = xml.DocuSignEnvelopeInformation.DocumentPDFs[0].DocumentPDF;
 			for (var i = 0; i < nodeList.length; i++) {
 				var pdf = nodeList[i];
-				filename = self.docPrefix + pdf.DocumentID[0] + ".pdf";
+				filename = "doc_" + (pdf.DocumentID ? pdf.DocumentID[0] : "") + ".pdf";
 				var fullFilename = envelopeDir + "/" + filename;
 				try {
-					fs.writeFile(fullFilename, pdf.PDFBytes[0]);
+					fs.writeFile(fullFilename, new Buffer(pdf.PDFBytes[0], 'binary'));
 				} catch (ex) {
 					// Couldn't write the file! Alert the humans!
 					console.error("!!!!!! PROBLEM DocuSign Webhook: Couldn't store pdf " + filename + " !");
@@ -483,7 +483,7 @@ var statusItem = function(file, filename, filesDirUrl, callback) {
 			nodeList = xml.DocuSignEnvelopeInformation.DocumentPDFs[0].DocumentPDF;
 			for (var i = 0; i < nodeList.length; i++) {
 				var pdf = nodeList[i];
-				var docFilename = self.docPrefix + (pdf.DocumentID ? pdf.DocumentID[0] : "") + ".pdf";
+				var docFilename = "doc_" + (pdf.DocumentID ? pdf.DocumentID[0] : "") + ".pdf";
 				documents.push({
 					"document_ID": (pdf.DocumentID ? pdf.DocumentID[0] : ""),
 					"document_type": pdf.DocumentType[0],
