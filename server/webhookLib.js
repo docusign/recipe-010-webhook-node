@@ -204,25 +204,41 @@ WebhookLib.prototype.send2 = function(params, callback) {
 		// object,
 		// and an eventNotification object which sets the parameters for
 		// webhook notifications to us from the DocuSign platform
+		var envelopeEvents = [];
 		var envelopeEvent = new docusign.EnvelopeEvent();
 		envelopeEvent.setEnvelopeEventStatusCode("sent");
+		envelopeEvents.push(envelopeEvent);
+		envelopeEvent = new docusign.EnvelopeEvent();
 		envelopeEvent.setEnvelopeEventStatusCode("delivered");
+		envelopeEvents.push(envelopeEvent);
+		envelopeEvent = new docusign.EnvelopeEvent();
 		envelopeEvent.setEnvelopeEventStatusCode("completed");
+		envelopeEvents.push(envelopeEvent);
+		envelopeEvent = new docusign.EnvelopeEvent();
 		envelopeEvent.setEnvelopeEventStatusCode("declined");
+		envelopeEvents.push(envelopeEvent);
+		envelopeEvent = new docusign.EnvelopeEvent();
 		envelopeEvent.setEnvelopeEventStatusCode("voided");
-		envelopeEvent.setEnvelopeEventStatusCode("sent");
-		envelopeEvent.setEnvelopeEventStatusCode("sent");
-		var envelopeEvents = [];
 		envelopeEvents.push(envelopeEvent);
 
+		var recipientEvents = [];
 		var recipientEvent = new docusign.RecipientEvent();
 		recipientEvent.setRecipientEventStatusCode("Sent");
+		recipientEvents.push(recipientEvent);
+		recipientEvent = new docusign.RecipientEvent();
 		recipientEvent.setRecipientEventStatusCode("Delivered");
+		recipientEvents.push(recipientEvent);
+		recipientEvent = new docusign.RecipientEvent();
 		recipientEvent.setRecipientEventStatusCode("Completed");
+		recipientEvents.push(recipientEvent);
+		recipientEvent = new docusign.RecipientEvent();
 		recipientEvent.setRecipientEventStatusCode("Declined");
+		recipientEvents.push(recipientEvent);
+		recipientEvent = new docusign.RecipientEvent();
 		recipientEvent.setRecipientEventStatusCode("AuthenticationFailed");
+		recipientEvents.push(recipientEvent);
+		recipientEvent = new docusign.RecipientEvent();
 		recipientEvent.setRecipientEventStatusCode("AutoResponded");
-		var recipientEvents = [];
 		recipientEvents.push(recipientEvent);
 
 		var eventNotification = new docusign.EventNotification();
