@@ -12,7 +12,7 @@ The recipe source can be run on [Heroku](https://www.heroku.com/) using the free
 
 Click the Deploy button, then enter your DocuSign Developer Sandbox credentials on the form in the Heroku dashboard. Then press the View button at the bottom of the dashboard screen when it is enabled by the dashboard.
 
-## Run the recipe on MS Azure 
+## Run the recipe on MS Azure
 The recipe source can be run on [MS Azure](https://portal.azure.com/) using their trial offer.
 
 [![Deploy to Azure](http://azuredeploy.net/deploybutton.png)](https://azuredeploy.net/)
@@ -30,4 +30,18 @@ You need an email address and password registered with the free DocuSign Develop
 ```sh
 % npm install
 % heroku local
+```
+
+## Run the recipe with Docker
+
+This can be ran on a Docker container.
+
+Build the Docker image
+```
+docker build . connect_listener
+```
+
+Run the Docker image
+```
+docker run connect_listener
 ```
