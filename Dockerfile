@@ -10,7 +10,7 @@ RUN mkdir $dir
 COPY . $dir
 WORKDIR $dir
 
-# update npm
+# install node modules
 RUN npm install
 
 # expose web port and start npm
