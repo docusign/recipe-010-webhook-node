@@ -26,7 +26,7 @@ module.exports.init = function(userEmail, userPw, integrationId, accountId) {
 
 	if ((userEmail == null) || (userEmail.length < 4)) {
 		console.log(
-			"<h3>No DocuSign login settings! Either set in the script or use environment variables userEmail, userPw, and integrationId</h3>");
+			"<h3>No DocuSign login settings! Either set in the script or use environment variables DS_USER_EMAIL, DS_USER_PW, and DS_INTEGRATION_ID</h3>");
 	}
 	// Decode the pw if it is in base64
 	if (this.b64PwPrefix === userPw.substring(0, b64PwPrefix.length)) {
